@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paris en Ligne</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        form {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        input[type="text"], input[type="submit"] {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Qui gagne les worlds ?</h1>
+    <form id="betForm">
+        <input type="text" id="name" placeholder="Votre nom" required>
+        <input type="text" id="bet" placeholder="Votre pari" required>
+        <input type="submit" value="Parier">
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        document.getElementById('betForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const bet = document.getElementById('bet').value;
+
+            fetch('/submit-bet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, bet: bet })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('responseMessage').textContent = data.message;
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').textContent = "Erreur : " + error;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats des Paris</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 70%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Résultats des Paris</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Pari</th>
+                <th>Date et Heure</th>
+            </tr>
+        </thead>
+        <tbody id="resultsTable">
+            <!-- Les résultats des paris seront insérés ici -->
+        </tbody>
+    </table>
+
+    <script>
+        // Récupérer les paris depuis le serveur
+        fetch('/get-bets')
+        .then(response => response.json())
+        .then(data => {
+            const resultsTable = document.getElementById('resultsTable');
+            data.forEach(bet => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                const betCell = document.createElement('td');
+                const dateTimeCell = document.createElement('td');
+                
+                nameCell.textContent = bet.name;
+                betCell.textContent = bet.bet;
+                dateTimeCell.textContent = bet.dateTime;
+                
+                row.appendChild(nameCell);
+                row.appendChild(betCell);
+                row.appendChild(dateTimeCell);
+                resultsTable.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des paris :', error);
+        });
+    </script>
+</body>
+</html>
